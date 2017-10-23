@@ -1,4 +1,4 @@
-package com.qyh.litemvp.ui;
+package com.qyh.paper.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,13 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qyh.litemvp.event.BusManager;
+import com.qyh.litemvp.nucleus.presenter.Presenter;
+import com.qyh.litemvp.nucleus.view.NucleusSupportFragment;
+
+import icepick.Icepick;
 
 /**
  * @Description: Fragment基类
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-19 14:52
  */
-public abstract class BaseFragment extends Fragment implements View.OnClickListener {
+public abstract class BaseFragment<P extends Presenter> extends NucleusSupportFragment<P> implements View.OnClickListener {
     protected Context mContext;
     protected Resources mResources;
     protected LayoutInflater mInflater;
@@ -41,6 +45,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
     @Override
@@ -55,6 +60,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         initView(view);
         bindEvent();
         initData();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        Icepick.saveInstanceState(this, bundle);
     }
 
     @Override

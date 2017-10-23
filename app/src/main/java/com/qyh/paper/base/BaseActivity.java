@@ -1,21 +1,27 @@
-package com.qyh.litemvp.ui;
+package com.qyh.paper.base;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.View;
 
 import com.qyh.litemvp.event.BusManager;
+import com.qyh.litemvp.nucleus.presenter.Presenter;
+import com.qyh.litemvp.nucleus.view.NucleusAppCompatActivity;
+import com.qyh.litemvp.ui.ActivityManager;
+
+import icepick.Icepick;
 
 /**
  * @Description: Activity基类
  * @author: <a href="http://www.xiaoyaoyou1212.com">DAWI</a>
  * @date: 2016-12-19 14:51
  */
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public abstract class BaseActivity<P extends Presenter> extends NucleusAppCompatActivity<P> implements View.OnClickListener {
     protected Context mContext;
     private SparseArray<View> mViews;
 
@@ -31,6 +37,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
         // 添加Activity到栈
         ActivityManager.getInstance().addActivity(this);
+
+        Icepick.restoreInstanceState(this, savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
